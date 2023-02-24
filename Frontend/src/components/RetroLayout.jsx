@@ -44,14 +44,14 @@ const RetroLayout=()=>{
                 <ToastContainer/>
                 <button className="h-8 bg-primary text-white rounded-xl w-28 hover:font-bold">Schedule</button>
             </div>
-            <div className="flex gap-36 place-items-center">
-                <input type="text" className="h-14 w-1/4 rounded-xl bg-gray-300 pl-4 outline-none focus:border hover:border border-gray-500" ref={questionRef} placeholder="Enter new question"/>
-                <button className="border border-primary text-primary px-4 rounded-xl h-8 hover:text-white hover:bg-primary hover:font-bold" 
+            <div className="flex gap-10 place-items-center">
+                <input type="text" className="h-14 w-1/4 rounded-xl border border-gray-300 pl-4 outline-none focus:border-gray-600 hover:border-gray-600" ref={questionRef} placeholder="Enter new question"/>
+                <button className="btn" 
                 onClick={handleSubmit}>
                     Create
                 </button>
             </div>
-            <div className="flex flex-col h-96 p-10 bg-gray-200 rounded-xl">
+            <div className={questions.length>0?"flex flex-col h-96 p-10 bg-gray-200 rounded-xl text-xl":""}>
                 {questions.map(question=>{
                     return(
                         <div className="flex gap-4" key={question.id}>

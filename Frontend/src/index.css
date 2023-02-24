@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-.navbtn{
-    @apply border border-primary text-primary font-bold px-4 py-2 rounded-xl hover:bg-primary hover:text-white
+.btn{
+    @apply border border-primary text-primary font-bold px-4 py-1 rounded-xl hover:bg-primary hover:text-white
+}
+
+.inp{
+    @apply border border-gray-300 h-10 w-1/5 pl-4 rounded-xl outline-none text-lg shadow-md shadow-primary
 }
