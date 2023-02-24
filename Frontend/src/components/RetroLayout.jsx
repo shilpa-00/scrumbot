@@ -35,7 +35,7 @@ const RetroLayout=()=>{
         setQuestions(questions.filter(item=>item.content!==question.content));
     }
     return(
-        <div className="flex flex-col m-10 ml-14 mb-20 w-screen justify-between">
+        <div className="flex flex-col m-10 w-screen justify-between">
             <div className="flex justify-between">
                 <div className="flex flex-col gap-4 text-primary">
                     <h1 className="text-xl font-extrabold">Kickass Scrumtool</h1>
@@ -45,7 +45,7 @@ const RetroLayout=()=>{
                 <button className="h-8 bg-primary text-white rounded-xl w-28 hover:font-bold">Schedule</button>
             </div>
             <div className="flex gap-36 place-items-center">
-                <input type="text" className="h-14 w-96 rounded-xl bg-gray-300 pl-4 outline-none focus:border hover:border border-gray-500" ref={questionRef} placeholder="Enter new question"/>
+                <input type="text" className="h-14 w-1/4 rounded-xl bg-gray-300 pl-4 outline-none focus:border hover:border border-gray-500" ref={questionRef} placeholder="Enter new question"/>
                 <button className="border border-primary text-primary px-4 rounded-xl h-8 hover:text-white hover:bg-primary hover:font-bold" 
                 onClick={handleSubmit}>
                     Create

@@ -11,7 +11,7 @@ const layout = (WrappedComponent, teams) => {
     };
 
     return (
-      <div className="flex flex-col w-screen font-serif gap-10 mx-16 mt-10 mb-14">
+      <div className="flex flex-col w-screen gap-10 m-10">
         <div className="flex justify-center text-4xl text-primary font-extrabold">Scrumbot</div>
         <div className="text-2xl text-primary font-bold">Kickass Scrumtool</div>
         <div className="text-lg text-primary font-bold">{selectedTeam===null?"Organization Level Metrics":selectedTeam.name}</div>
