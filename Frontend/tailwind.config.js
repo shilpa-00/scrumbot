@@ -8,6 +8,9 @@ module.exports = {
         primary: "#00005a"
       }
     },
+    fontFamily:{
+      sans:['Roboto','sans-serif'],
+    }
   },
   plugins: [],
 }

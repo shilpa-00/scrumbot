@@ -1,23 +1,29 @@
-import React, { useState,useRef } from "react";
+import React, { useState,useRef,useContext } from "react";
+import { UserContext } from "../App";
+import { TeamContext } from "../App";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const layout = (WrappedComponent) => {
   const Layout = ({teams,setTeams}) => {
-    const [selectedTeam, setSelectedTeam] = useState(null);
     const [activeButton, setActiveButton] = useState(null);
     const [createTeam, setCreateTeam] = useState(false);
+    const navigate=useNavigate();
+    const [user]=useContext(UserContext);
+    const [team,setTeam]=useContext(TeamContext);
+    console.log(user);
     const nameRef=useRef();
     const sizeRef=useRef();
 
     const handleTeamClick = (team) => {
-      setSelectedTeam(team);
       setActiveButton(team.name);
+      setTeam(team);
     };
 
     const handleVisibility=()=>{
       setCreateTeam(true);
-      console.log(createTeam);
+      // console.log(createTeam);
     }
 
     const handleCreate=()=>{
@@ -51,12 +57,16 @@ const layout = (WrappedComponent) => {
       }
     }
 
+    const handleChange=()=>{
+      navigate('/retro');
+    }
+
     return (
       <div className="w-screen m-10">
         <ToastContainer/>
       {createTeam===true?
-      (<div className="h-full border border-white">
-        <div className="flex flex-col gap-6 mt-72 items-center">
+      (<div className="flex justify-center items-center h-full">
+        <div className="flex flex-col gap-6 items-center">
           <h1 className="text-4xl text-primary font-bold">Team</h1>
           <input type="text" ref={nameRef} className="inp" placeholder="Team Name"/>
           <input type="number" ref={sizeRef} className="inp" placeholder="Team Size"/>
@@ -73,9 +83,16 @@ const layout = (WrappedComponent) => {
             Create Team
           </button>
         </div>
-        <div className="text-lg text-primary font-bold">{selectedTeam===null?"Organization Level Metrics":selectedTeam.name}</div>
+        <div className="flex justify-between text-xl text-primary font-bold">
+          {team===null?"Organization Level Metrics":team.name}
+          {team===null?
+            "":
+            <button className="border border-primary px-4 rounded-xl font-normal hover:bg-primary hover:text-white" onClick={handleChange}>
+              Retro
+            </button>}
+        </div>
         <div className="h-2/3 bg-gray-100 rounded-3xl">
-            {selectedTeam===null?<WrappedComponent name="All teams"/> :<WrappedComponent name={selectedTeam.name}/>}
+            {team===null?<WrappedComponent name="All teams"/> :<WrappedComponent name={team.name}/>}
         </div>
         {teams.length>0?(   
           <div>

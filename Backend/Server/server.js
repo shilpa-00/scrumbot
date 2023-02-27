@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const userRouter = require('./routes/userRoutes');
+const quesRouter = require('./routes/quesRoutes');
+const teamRouter = require('./routes/teamRoutes');
+
 require('dotenv').config();
 
 const app = express();
@@ -34,4 +37,5 @@ mongoose.connect(uri)
 
 
 app.use("/users", userRouter);
-
+app.use("/ques",quesRouter);
+app.use("/team",teamRouter);

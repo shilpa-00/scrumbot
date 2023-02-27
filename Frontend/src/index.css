@@ -7,5 +7,5 @@
 }
 
 .inp{
-    @apply border border-gray-300 h-10 w-1/5 pl-4 rounded-xl outline-none text-lg shadow-md shadow-primary
+    @apply border border-gray-300 h-10 w-80 pl-4 rounded-xl outline-none text-lg shadow-md shadow-primary
 }
