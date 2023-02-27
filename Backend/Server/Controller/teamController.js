@@ -7,14 +7,15 @@ const create = async (req, res) => {
 
     const { TeamName, Count } = req.body;
     const existingUser = await user.findOne({email:req.user.email});
+    // console.log(existingUser)
     const result = new TeamSchema({
         TeamName: TeamName,
-        Admin: existingUser.id,
+        Admin: existingUser._id,
         Count: Count,
     })
     try {
-        const existingTeam = await TeamSchema.findOne({ Team: Team });
-        if (Team != "" && !existingTeam ) {
+        // const existingTeam = await TeamSchema.findOne({ Team: Team });
+        if (Team != "" ) {
             await result.save();
             res.status(201).json({ TeamName: TeamName });
         }

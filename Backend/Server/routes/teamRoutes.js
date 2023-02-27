@@ -6,11 +6,11 @@ const SECRET_KEY = "Kickasskey"
 
 function middle(req,res,next)
 {
+    // console.log("hi")
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
         return res.status(401).send("Authorization header missing");
     }
-    
     const token=authHeader.split(' ')[1]
     jwt.verify(token,SECRET_KEY,(er,data)=>{
         if(er)

@@ -1,5 +1,6 @@
 import React,{useContext} from "react";
 import { UserContext } from "../App";
+import { TokenContext } from "../App";
 import {BsFillPersonFill,BsKeyFill} from 'react-icons/bs';
 import { useRef } from "react";
 import axios from "axios";
@@ -9,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Login=()=>{
     const [user,setUser]=useContext(UserContext);
+    const [token,setToken]=useContext(TokenContext);
     console.log(user);
     const email=useRef('')
     const password=useRef('')
@@ -18,7 +20,9 @@ const Login=()=>{
             axios.post("http://localhost:5000/users/login",
                         {email:email.current.value,password:password.current.value}
                     ).then((data)=>{
-                        setUser('Admin');
+                        console.log(data.data.token)
+                        setUser(data.data.user);
+                        setToken(data.data.token)
                         navigate('/home');
                         email.current.value=''
                         password.current.value=''

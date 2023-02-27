@@ -6,14 +6,17 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const UserContext=React.createContext();
 const TeamContext=React.createContext();
+const TokenContext=React.createContext();
 
 function App() {
   const [user,setUser]=useState(null);
   const [team,setTeam]=useState(null);
+  const [token,setToken]=useState(null);
   // setUser('Admin');
   return (
     <UserContext.Provider value={[user,setUser]}>
       <TeamContext.Provider value={[team,setTeam]}>
+        <TokenContext.Provider value={[token,setToken]}>
         <Router>
             <Routes>
               <Route path='/' element={<Login/>}/>
@@ -21,6 +24,7 @@ function App() {
               <Route path='/retro' element={<Retrospective/>}/>
             </Routes>
         </Router>
+        </TokenContext.Provider>
       </TeamContext.Provider>
     </UserContext.Provider>
   );
@@ -29,3 +33,4 @@ function App() {
 export default App;
 export {UserContext};
 export {TeamContext};
+export {TokenContext};

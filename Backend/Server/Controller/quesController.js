@@ -29,6 +29,7 @@ const create = async (req, res) => {
 }
 
 const del = async (req, res) => {
+    console.log(req.params.id)
     await Ques.findByIdAndDelete(req.params.id)
         .then(Ques => {
             res.status(201).json({ message: "Deleted", Ques });

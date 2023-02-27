@@ -6,11 +6,10 @@ import { useNavigate } from "react-router-dom";
 const Sidebar = () => {
     const [user] = useContext(UserContext);
     const [display, setDisplay] = useState(false);
-    const navigate = useNavigate()
-    const name = user;
+    const navigate = useNavigate();
     var avatarname = '';
     if (user) {
-        const arr = name.split(" ")
+        const arr = user.split(" ")
         avatarname = arr[0].split("")[0] + arr[arr.length - 1].split("")[0]
 
     }
