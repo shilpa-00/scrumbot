@@ -40,7 +40,6 @@ const layout = (WrappedComponent) => {
     }, []);
     const handleCreate = () => {
       if (nameRef.current.value !== '' && sizeRef.current.value !== '') {
-        setTeams([...teams, { TeamName: nameRef.current.value, Count: sizeRef.current.value }]);
         axios.post("http://localhost:5000/team/create",
           JSON.stringify({
             TeamName: nameRef.current.value,
@@ -54,6 +53,7 @@ const layout = (WrappedComponent) => {
             }
           }
         ).then((data) => {
+          setTeams([...teams, { _id:data.data.id,TeamName: nameRef.current.value, Count: sizeRef.current.value }]);
           nameRef.current.value = "";
           sizeRef.current.value = "";
           setCreateTeam(false);
@@ -113,9 +113,9 @@ const layout = (WrappedComponent) => {
               </button>
             </div>
           </div>) :
-          (<div className="flex flex-col gap-10 h-full">
+          (<div className="flex flex-col gap-4 h-full">
             <div className="flex justify-center text-4xl text-primary font-extrabold">Scrumbot</div>
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-6">
               <h1 className="text-2xl text-primary font-bold">Kickass Scrumtool</h1>
               <button className="bg-primary text-white w-28 rounded-xl hover:font-bold" onClick={handleVisibility}>
                 Create Team

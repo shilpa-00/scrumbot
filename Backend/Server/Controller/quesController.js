@@ -12,16 +12,17 @@ const create = async (req, res) => {
     console.log(TeamName)
     // const existingUser = await user.findOne({email:req.user.email});
     const t=await Team.findOne({TeamName:TeamName})
-    console.log(t);
+    // console.log(t);
     const result = new QuesSchema({
         Ques: Ques,
         TeamID: t.id
     })
+    // console.log("Here",result)
     try {
         const existingQuestion = await QuesSchema.findOne({ Ques: Ques });
         if (Ques != "") {
-            // await result.save();
-            res.status(201).json({ ques: Ques });
+            await result.save();
+            res.status(201).json({ ques: Ques,id:result._id });
         }
         else {
             return res.status(400).json({ message: "Question is empyt or Question already Exists" });
@@ -48,6 +49,7 @@ const deleteAll = (req, res) => {
 
 const deleteMultiple = (req, res) => {
     const idsToDelete = req.body.ids; // Assuming the request body contains an array of question IDs to delete
+    console.log(idsToDelete)
     Ques.deleteMany({ _id: { $in: idsToDelete } })
         .then(() => res.json("Questions Deleted"))
         .catch(err => res.status(400).json('Error: ' + err));

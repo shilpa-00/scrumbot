@@ -13,6 +13,7 @@ const RetroLayout = () => {
     const [checked, setChecked] = useState([]);
     const [team] = useContext(TeamContext);
     const [token] = useContext(TokenContext);
+    const [l, setL] = useState([])
     // console.log(user + " " + team.name);
     const [questions, setQuestions] = useState([]);
     const questionRef = useRef();
@@ -20,10 +21,10 @@ const RetroLayout = () => {
     const isChecked = (item) =>
         checked.includes(item) ? "checked-item" : "not-checked-item";
     useEffect(() => {
-        axios.get("http://localhost:5000/ques/findAll")
+        axios.get(`http://localhost:5000/ques/findAllByID/${team._id}`)
             .then((data) => {
-                console.log(data.data)
                 setQuestions(data.data)
+                // console.log("Initial",questions)
             })
             .catch((error) => {
                 console.log(error);
@@ -32,7 +33,7 @@ const RetroLayout = () => {
     const handleSubmit = () => {
         // console.log(team.TeamName)
         if (questionRef.current.value !== "") {
-            setQuestions([...questions, questionRef.current.value]);
+
 
             axios.post("http://localhost:5000/ques/create",
                 JSON.stringify({
@@ -48,6 +49,8 @@ const RetroLayout = () => {
                 }
             ).then((data) => {
                 questionRef.current.value = "";
+                setQuestions([...questions, { Ques: data.data.ques, _id: data.data.id }]);
+                console.log(questions)
                 toast.success('Question created successfully!', {
                     position: "top-right",
                     autoClose: 3000,
@@ -85,8 +88,8 @@ const RetroLayout = () => {
         }
     };
     const handleEdit = (question) => {
-        setQuestions(questions.filter((item) => item !== question));
-        questionRef.current.value = question;
+        setQuestions(questions.filter((item) => item.Ques !== question.Ques));
+        questionRef.current.value = question.Ques;
         questionRef.current.focus();
     };
     function handleSelect() {
@@ -105,33 +108,28 @@ const RetroLayout = () => {
     }
     const handleDelete = () => {
         if (checked.length !== 0) {
-            setQuestions(questions.filter((item) => checked.indexOf(item) === -1));
-            if (checked.length === questions.length) {
-                axios.post("http://localhost:5000/ques/deleteAll")
-                    .then(response => {
-                        toast.success("All questions deleted successfully!", {
-                            position: "top-center",
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "colored",
-                        });
-                    })
-            }
-            else {
-                checked.forEach(id => {
-                    axios.delete(`http://localhost:5000/ques/delete/${id}`)
-                        .then(response => {
-                            console.log(`Team ${id} deleted successfully`);
-                        })
-                        .catch(error => {
-                            console.log(`Error deleting team ${id}: ${error}`);
-                        });
-                });
-            }
+
+            console.log(l)
+            axios.post('http://localhost:5000/ques/deleteMultiple',
+                { ids: l }
+            )
+                .then(response => {
+                    // console.log('Deleted')
+                    setQuestions(questions.filter((item) => checked.indexOf(item.Ques) === -1));
+                    toast.success("Deleted successfully!", {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                })
             uncheckElements();
             // console.log(checked);
         } else {
@@ -149,14 +147,20 @@ const RetroLayout = () => {
     };
     // Add/Remove checked item from list
     const handleCheck = (event) => {
-        console.log("Handle", checked);
         var updatedList = [...checked];
         if (event.target.checked) {
             updatedList = [...checked, event.target.value];
         } else {
             updatedList.splice(checked.indexOf(event.target.value), 1);
         }
+        let x = [];
+        questions.map((ques) => {
+            if (updatedList.indexOf(ques.Ques) !== -1)
+                x.push(ques._id);
+        });
+        setL(x);
         setChecked(updatedList);
+        // console.log("Handle", x);
     };
     return (
         <div className="flex flex-col m-10 w-screen gap-10">
@@ -164,7 +168,7 @@ const RetroLayout = () => {
             <div className="flex justify-between">
                 <div className="flex flex-col gap-4 text-primary">
                     <h1 className="text-2xl font-extrabold">Kickass Scrumtool</h1>
-                    <h2 className="text-xl font-bold">{(team) ? team.name : ''}</h2>
+                    <h2 className="text-xl font-bold">{(team) ? team.TeamName : ''}</h2>
                 </div>
                 <ToastContainer />
                 <button className="h-8 bg-primary text-white rounded-xl w-28 hover:font-bold">Schedule</button>
@@ -194,12 +198,12 @@ const RetroLayout = () => {
                     </button>)}
                 </div>
             </div>
-            {console.log(questions)}
+            {/* {console.log(questions)} */}
             <div className={questions.length > 0 ? "flex flex-col p-10 gap-2 bg-gray-200 rounded-xl text-xl" : ""}>
                 {questions.map((question, idx) => (
                     <div className="flex gap-4" key={idx}>
-                        <input value={question} type="checkbox" onChange={handleCheck} />
-                        <p className={isChecked(question)}>{question.Ques}</p>
+                        <input value={question.Ques} type="checkbox" onChange={handleCheck} />
+                        <p className={isChecked(question.Ques)}>{question.Ques}</p>
                         <button onClick={() => handleEdit(question)}>
                             <VscEdit />
                         </button>

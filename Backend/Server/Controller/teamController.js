@@ -16,7 +16,7 @@ const create = async (req, res) => {
         console.log(existingTeam , TeamName);
         if (Team != "" && !existingTeam ) {
             await result.save();
-            res.status(201).json({ TeamName: TeamName });
+            res.status(201).json({ TeamName: TeamName, id:result._id });
         }
         else {
             return res.status(400).json({ message: "Team is already Exists" });
