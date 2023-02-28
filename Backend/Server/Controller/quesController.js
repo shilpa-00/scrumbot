@@ -74,7 +74,7 @@ const findAllByID = async (req, res) => {
 
 const update = async (req, res) => {
     await Ques.findByIdAndUpdate(req.params.id, req.body)
-        .then(() => res.json('Question updated'))
+        .then(() => res.json({ques:req.body.Ques}))
         .catch(err => res.status(400).json('Error: ' + err));
 }
 

@@ -125,7 +125,7 @@ const layout = (WrappedComponent) => {
               {team === null ? "Organization Level Metrics" : team.TeamName}
               {team === null ?
                 "" :
-                <button className="border border-primary px-4 rounded-xl font-normal hover:bg-primary hover:text-white" onClick={handleChange}>
+                <button className="border border-primary w-28 rounded-xl hover:bg-primary font-normal hover:text-white" onClick={handleChange}>
                   Retro
                 </button>}
             </div>

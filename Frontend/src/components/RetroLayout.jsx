@@ -7,16 +7,20 @@ import { VscEdit } from "react-icons/vsc";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../App.css';
+import { useNavigate } from "react-router-dom";
 
 const RetroLayout = () => {
     const [user] = useContext(UserContext);
     const [checked, setChecked] = useState([]);
+    const [currentQuestion, setCurrentQuestion] = useState();
     const [team] = useContext(TeamContext);
     const [token] = useContext(TokenContext);
     const [l, setL] = useState([])
+    const [update, setUpdate] = useState(false);
     // console.log(user + " " + team.name);
     const [questions, setQuestions] = useState([]);
     const questionRef = useRef();
+    const navigate = useNavigate();
     // Return classes based on whether item is checked
     const isChecked = (item) =>
         checked.includes(item) ? "checked-item" : "not-checked-item";
@@ -33,8 +37,6 @@ const RetroLayout = () => {
     const handleSubmit = () => {
         // console.log(team.TeamName)
         if (questionRef.current.value !== "") {
-
-
             axios.post("http://localhost:5000/ques/create",
                 JSON.stringify({
                     Ques: questionRef.current.value,
@@ -49,6 +51,7 @@ const RetroLayout = () => {
                 }
             ).then((data) => {
                 questionRef.current.value = "";
+                console.log(data)
                 setQuestions([...questions, { Ques: data.data.ques, _id: data.data.id }]);
                 console.log(questions)
                 toast.success('Question created successfully!', {
@@ -76,7 +79,7 @@ const RetroLayout = () => {
             })
         } else {
             toast.warn("Empty question!", {
-                position: "top-center",
+                position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -87,10 +90,61 @@ const RetroLayout = () => {
             });
         }
     };
+    const handleUpdate = () => {
+        if (questionRef.current.value !== '') {
+            axios.post(`http://localhost:5000/ques/update/${currentQuestion._id}`,
+                { Ques: questionRef.current.value })
+                .then(data => {
+                    console.log(currentQuestion.Ques);
+                    // console.log(questionRef.current.value)
+                    setQuestions(questions.filter(item=>item.Ques !== currentQuestion.Ques));
+                    setQuestions([...questions,{ Ques: data.data.ques , _id: currentQuestion.id }]);
+                    toast.success("Updated Successfully!", {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                    });
+                })
+                .catch(error => {
+                    toast.error(`${error.message}!`, {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                    });
+                })
+            setUpdate(false);
+            setCurrentQuestion('');
+            questionRef.current.value='';
+        }
+        else{
+            toast.warn("Empty Question!", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        }
+    }
     const handleEdit = (question) => {
         setQuestions(questions.filter((item) => item.Ques !== question.Ques));
         questionRef.current.value = question.Ques;
         questionRef.current.focus();
+        setUpdate(true);
+        setCurrentQuestion(question);
     };
     function handleSelect() {
         var uncheck = document.querySelectorAll("input[type=checkbox]");
@@ -117,7 +171,7 @@ const RetroLayout = () => {
                     // console.log('Deleted')
                     setQuestions(questions.filter((item) => checked.indexOf(item.Ques) === -1));
                     toast.success("Deleted successfully!", {
-                        position: "top-center",
+                        position: "top-right",
                         autoClose: 3000,
                         hideProgressBar: false,
                         closeOnClick: true,
@@ -134,7 +188,7 @@ const RetroLayout = () => {
             // console.log(checked);
         } else {
             toast.warn("Question(s) are Not Selected!", {
-                position: "top-center",
+                position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -162,9 +216,15 @@ const RetroLayout = () => {
         setChecked(updatedList);
         // console.log("Handle", x);
     };
+    const handleBack = () => {
+        navigate('/home');
+    }
     return (
         <div className="flex flex-col m-10 w-screen gap-10">
-            <div className="flex justify-center text-4xl text-primary font-extrabold">Scrumbot</div>
+            <div>
+                <button className="text-primary border border-primary px-2 rounded-xl hover:bg-primary hover:text-white" onClick={handleBack}>Back</button>
+                <div className="flex justify-center text-4xl text-primary font-extrabold">Scrumbot</div>
+            </div>
             <div className="flex justify-between">
                 <div className="flex flex-col gap-4 text-primary">
                     <h1 className="text-2xl font-extrabold">Kickass Scrumtool</h1>
@@ -177,10 +237,17 @@ const RetroLayout = () => {
                 <label className="text-lg">Write your question?</label>
                 <div className="flex gap-10 place-items-center">
                     <input type="text" className="h-14 w-1/4 rounded-xl border border-gray-300 pl-4 outline-none focus:border-gray-600 hover:border-gray-600" ref={questionRef} placeholder="Enter new question" />
-                    <button className="btn"
-                        onClick={handleSubmit}>
-                        Create
-                    </button>
+                    {
+                        update ? (<button className="btn"
+                            onClick={handleUpdate}>
+                            Update
+                        </button>) : (
+                            <button className="btn"
+                                onClick={handleSubmit}>
+                                Create
+                            </button>
+                        )
+                    }
                 </div>
             </div>
             <div className="flex gap-6">
