@@ -6,7 +6,7 @@ import axios from "axios";
 import { VscEdit } from "react-icons/vsc";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import '../App.css'
+import '../App.css';
 
 const RetroLayout = () => {
     const [user] = useContext(UserContext);
@@ -19,7 +19,7 @@ const RetroLayout = () => {
     // Return classes based on whether item is checked
     const isChecked = (item) =>
         checked.includes(item) ? "checked-item" : "not-checked-item";
-    const fetchItems=()=>{
+    useEffect(() => {
         axios.get("http://localhost:5000/ques/findAll")
             .then((data) => {
                 console.log(data.data)
@@ -28,17 +28,16 @@ const RetroLayout = () => {
             .catch((error) => {
                 console.log(error);
             })
-    }
-    useEffect(() => {
-        fetchItems();
-    }, [])
+    }, []);
     const handleSubmit = () => {
+        // console.log(team.TeamName)
         if (questionRef.current.value !== "") {
             setQuestions([...questions, questionRef.current.value]);
 
             axios.post("http://localhost:5000/ques/create",
                 JSON.stringify({
-                    Ques: questionRef.current.value
+                    Ques: questionRef.current.value,
+                    TeamName: team.TeamName
                 }),
                 {
                     headers:
@@ -107,7 +106,32 @@ const RetroLayout = () => {
     const handleDelete = () => {
         if (checked.length !== 0) {
             setQuestions(questions.filter((item) => checked.indexOf(item) === -1));
-            axios.delete(`http://localhost:5000/ques/delete`)
+            if (checked.length === questions.length) {
+                axios.post("http://localhost:5000/ques/deleteAll")
+                    .then(response => {
+                        toast.success("All questions deleted successfully!", {
+                            position: "top-center",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "colored",
+                        });
+                    })
+            }
+            else {
+                checked.forEach(id => {
+                    axios.delete(`http://localhost:5000/ques/delete/${id}`)
+                        .then(response => {
+                            console.log(`Team ${id} deleted successfully`);
+                        })
+                        .catch(error => {
+                            console.log(`Error deleting team ${id}: ${error}`);
+                        });
+                });
+            }
             uncheckElements();
             // console.log(checked);
         } else {

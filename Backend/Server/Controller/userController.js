@@ -6,8 +6,8 @@ const SECRET_KEY = "Kickasskey"
 const login = async(req,res) =>{
     const {email, password} = req.body;
     try{
-        const existingUser = await UserSchema.findOne({$or:[{email:email},{username:email}]});
-        console.log(existingUser);
+        const existingUser = await UserSchema.findOne({email:email});
+        // console.log(existingUser._id.toString());
         if(!existingUser)
         {
             return res.status(400).json({Message: "User not found"});

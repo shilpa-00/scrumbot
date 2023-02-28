@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const userRouter = require('./routes/userRoutes');
 const quesRouter = require('./routes/quesRoutes');
 const teamRouter = require('./routes/teamRoutes');
+const scheduleRouter = require('./routes/scheduleRoutes');
 
 require('dotenv').config();
 
@@ -39,3 +40,4 @@ mongoose.connect(uri)
 app.use("/users", userRouter);
 app.use("/ques",quesRouter);
 app.use("/team",teamRouter);
+app.use("/schedule",scheduleRouter);

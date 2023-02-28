@@ -4,18 +4,17 @@ let user = require('../Schema/UserSchema');
 
 
 const create = async (req, res) => {
-
     const { TeamName, Count } = req.body;
     const existingUser = await user.findOne({email:req.user.email});
-    // console.log(existingUser)
     const result = new TeamSchema({
         TeamName: TeamName,
-        Admin: existingUser._id,
+        Admin: existingUser.id,
         Count: Count,
     })
     try {
-        // const existingTeam = await TeamSchema.findOne({ Team: Team });
-        if (Team != "" ) {
+        const existingTeam = await TeamSchema.findOne({ Team: TeamName });
+        console.log(existingTeam , TeamName);
+        if (Team != "" && !existingTeam ) {
             await result.save();
             res.status(201).json({ TeamName: TeamName });
         }

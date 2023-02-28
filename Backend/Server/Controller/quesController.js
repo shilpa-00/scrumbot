@@ -1,22 +1,26 @@
 const QuesSchema = require("../Schema/QuesSchema");
 let Ques = require('../Schema/QuesSchema');
 let user = require('../Schema/UserSchema');
+let Team = require('../Schema/TeamSchema');
 
 
 const create = async (req, res) => {
     //To find username and team id from teamDB
 
-    const { Ques } = req.body;
-    const existingUser = await user.findOne({email:req.user.email});
-    console.log(existingUser);
+    const { Ques,TeamName } = req.body;
+    console.log(Ques)
+    console.log(TeamName)
+    // const existingUser = await user.findOne({email:req.user.email});
+    const t=await Team.findOne({TeamName:TeamName})
+    console.log(t);
     const result = new QuesSchema({
         Ques: Ques,
-        TeamID: existingUser.id
+        TeamID: t.id
     })
     try {
         const existingQuestion = await QuesSchema.findOne({ Ques: Ques });
-        if (Ques != "" && !existingQuestion ) {
-            await result.save();
+        if (Ques != "") {
+            // await result.save();
             res.status(201).json({ ques: Ques });
         }
         else {
@@ -29,7 +33,6 @@ const create = async (req, res) => {
 }
 
 const del = async (req, res) => {
-    console.log(req.params.id)
     await Ques.findByIdAndDelete(req.params.id)
         .then(Ques => {
             res.status(201).json({ message: "Deleted", Ques });
@@ -46,7 +49,7 @@ const deleteAll = (req, res) => {
 const deleteMultiple = (req, res) => {
     const idsToDelete = req.body.ids; // Assuming the request body contains an array of question IDs to delete
     Ques.deleteMany({ _id: { $in: idsToDelete } })
-        .then(() => res.json('Questions deleted'))
+        .then(() => res.json("Questions Deleted"))
         .catch(err => res.status(400).json('Error: ' + err));
 };
 

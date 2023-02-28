@@ -23,6 +23,7 @@ const Login=()=>{
                         console.log(data.data.token)
                         setUser(data.data.user);
                         setToken(data.data.token)
+                        console.log(data.data.token)
                         navigate('/home');
                         email.current.value=''
                         password.current.value=''
