@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "start": "yarn run dev",
+    "test": "yarn run test"
   },
+  
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
@@ -25,5 +25,7 @@
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react-swc": "^3.0.0",
     "vite": "^4.1.0"
-  }
+  },
+  "main": "index.js",
+  "license": "MIT"
 }
