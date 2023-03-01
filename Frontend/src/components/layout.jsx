@@ -53,7 +53,7 @@ const layout = (WrappedComponent) => {
             }
           }
         ).then((data) => {
-          setTeams([...teams, { _id:data.data.id,TeamName: nameRef.current.value, Count: sizeRef.current.value }]);
+          setTeams([...teams, { _id: data.data.id, TeamName: nameRef.current.value, Count: sizeRef.current.value }]);
           nameRef.current.value = "";
           sizeRef.current.value = "";
           setCreateTeam(false);
@@ -115,20 +115,23 @@ const layout = (WrappedComponent) => {
           </div>) :
           (<div className="flex flex-col gap-4 h-full">
             <div className="flex justify-center text-4xl text-primary font-extrabold">Scrumbot</div>
-            <div className="flex justify-between mt-6">
-              <h1 className="text-2xl text-primary font-bold">Kickass Scrumtool</h1>
-              <button className="bg-primary text-white w-28 rounded-xl hover:font-bold" onClick={handleVisibility}>
-                Create Team
-              </button>
+            {/* <div className="flex justify-between mt-6">
+               <h1 className="text-2xl text-primary font-bold">Kickass Scrumtool</h1> 
+            </div> */}
+            <div className="flex justify-between mt-6 text-primary text-lg">
+              <p className="font-bold text-xl">{team === null ? "Organization Level Metrics" : team.TeamName}</p>
+              <div className="flex gap-4">
+                {team === null ?
+                  "" :
+                  <button className="border border-primary w-32 rounded-xl hover:bg-primary font-normal hover:text-white" onClick={handleChange}>
+                    Retro
+                  </button>}
+                <button className="bg-primary text-white w-32 rounded-xl hover:font-bold" onClick={handleVisibility}>
+                  Create Team
+                </button>
+              </div>
             </div>
-            <div className="flex justify-between text-xl text-primary font-bold">
-              {team === null ? "Organization Level Metrics" : team.TeamName}
-              {team === null ?
-                "" :
-                <button className="border border-primary w-28 rounded-xl hover:bg-primary font-normal hover:text-white" onClick={handleChange}>
-                  Retro
-                </button>}
-            </div>
+
             <div className="h-2/3 bg-gray-100 rounded-3xl">
               {team === null ? <WrappedComponent name="All teams" /> : <WrappedComponent name={team.TeamName} />}
             </div>
