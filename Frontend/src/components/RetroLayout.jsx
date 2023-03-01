@@ -65,7 +65,7 @@ const RetroLayout = () => {
                     theme: "colored",
                 });
             }).catch((error) => {
-                console.log(error.message);
+                // console.log(error.message);
                 toast.error(`${error.message}!`, {
                     position: "top-right",
                     autoClose: 3000,
@@ -224,13 +224,14 @@ const RetroLayout = () => {
             <div>
                 <button className="text-primary border border-primary px-2 rounded-xl hover:bg-primary hover:text-white" onClick={handleBack}>Back</button>
                 <div className="flex justify-center text-4xl text-primary font-extrabold">Scrumbot</div>
+                <ToastContainer />
             </div>
             <div className="flex justify-between">
-                <div className="flex flex-col gap-4 text-primary">
+                {/* <div className="flex flex-col gap-4 text-primary">
                     <h1 className="text-2xl font-extrabold">Kickass Scrumtool</h1>
                     <h2 className="text-xl font-bold">{(team) ? team.TeamName : ''}</h2>
-                </div>
-                <ToastContainer />
+                </div> */}
+                <h2 className="text-primary text-2xl font-bold">{(team) ? team.TeamName : ''}</h2>
                 <button className="h-8 bg-primary text-white rounded-xl w-28 hover:font-bold">Schedule</button>
             </div>
             <div className="flex flex-col gap-4 mt-6">
@@ -250,7 +251,7 @@ const RetroLayout = () => {
                     }
                 </div>
             </div>
-            <div className="flex gap-6">
+            <div className="flex gap-6 place-items-center">
                 <div>
                     {questions.length > 0 && (<button onClick={() => handleDelete()} className='btn'>
                         Delete Selected
