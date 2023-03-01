@@ -20,7 +20,8 @@ const layout = (WrappedComponent) => {
     const sizeRef = useRef();
 
     const handleTeamClick = (team) => {
-      setActiveButton(team.name);
+      console.log(activeButton)
+      setActiveButton(team.TeamName);
       setTeam(team);
     };
 
@@ -132,7 +133,7 @@ const layout = (WrappedComponent) => {
               </div>
             </div>
 
-            <div className="h-2/3 bg-gray-100 rounded-3xl">
+            <div className="h-2/3 bg-gray-100 rounded-3xl invisible">
               {team === null ? <WrappedComponent name="All teams" /> : <WrappedComponent name={team.TeamName} />}
             </div>
             {teams.length > 0 ? (
